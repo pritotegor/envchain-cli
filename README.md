@@ -39,6 +39,16 @@ envchain run myproject -- ./start-server
 envchain list
 ```
 
+**Remove a chain or a specific variable from a chain:**
+
+```bash
+# Remove a single variable from a chain
+envchain unset myproject AWS_REGION
+
+# Remove an entire chain
+envchain unset myproject
+```
+
 **Integrate with a secret store (e.g., Vault, AWS SSM):**
 
 ```bash
