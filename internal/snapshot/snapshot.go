@@ -69,3 +69,22 @@ func (snap *Snapshot) Age() time.Duration {
 func (snap *Snapshot) Summary() string {
 	return fmt.Sprintf("chain=%q vars=%d age=%s", snap.ChainName, len(snap.Vars), snap.Age().Round(time.Second))
 }
+
+// Diff returns the keys that differ between this snapshot and another.
+// It returns three slices: keys added in other, keys removed in other,
+// and keys whose values changed between the two snapshots.
+func (snap *Snapshot) Diff(other *Snapshot) (added, removed, changed []string) {
+	for k, v := range other.Vars {
+		if orig, ok := snap.Vars[k]; !ok {
+			added = append(added, k)
+		} else if orig != v {
+			changed = append(changed, k)
+		}
+	}
+	for k := range snap.Vars {
+		if _, ok := other.Vars[k]; !ok {
+			removed = append(removed, k)
+		}
+	}
+	return added, removed, changed
+}
