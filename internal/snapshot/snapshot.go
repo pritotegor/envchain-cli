@@ -58,3 +58,14 @@ func (s *Snapshotter) Restore(snap *Snapshot, overwrite bool) error {
 	}
 	return nil
 }
+
+// Age returns the duration elapsed since the snapshot was captured.
+func (snap *Snapshot) Age() time.Duration {
+	return time.Since(snap.CapturedAt)
+}
+
+// Summary returns a human-readable one-line description of the snapshot,
+// including the chain name, number of variables, and time since capture.
+func (snap *Snapshot) Summary() string {
+	return fmt.Sprintf("chain=%q vars=%d age=%s", snap.ChainName, len(snap.Vars), snap.Age().Round(time.Second))
+}
